@@ -1,0 +1,24 @@
+version: '3'
+services:
+  redis_remote:
+    build: ./redis_remote
+    networks:
+      - public
+
+  redis_local:
+    build: ./redis_local
+    networks:
+      - private
+
+  scproxy:
+    build: .
+    volumes:
+      - .:/go/src/github.com/RyanJarv/scproxy
+    ports:
+      - "0.0.0.0:6379:6379"
+    networks:
+      - public
+      - private
+networks:
+  public:
+  private:

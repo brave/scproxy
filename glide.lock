@@ -1,0 +1,16 @@
+hash: a8e812ee7c9cd37541917ba079fa82ffb7738b029fab7e2fbe55c7bb3664a96b
+updated: 2018-05-20T01:41:15.5434768Z
+imports:
+- name: github.com/go-redis/redis
+  version: 877867d2845fbaf86798befe410b6ceb6f5c29a3
+  subpackages:
+  - internal
+  - internal/consistenthash
+  - internal/hashtag
+  - internal/pool
+  - internal/proto
+  - internal/singleflight
+  - internal/util
+- name: github.com/tidwall/redcon
+  version: 56b016127ae730019c5e3073a413ad9526440c38
+testImports: []
