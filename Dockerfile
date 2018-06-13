@@ -1,4 +1,12 @@
 FROM golang
-WORKDIR /go/src/github.com/RyanJarv/scproxy
+ENV GOPATH /go
 RUN curl https://glide.sh/get | sh
-CMD go run main.go
+
+WORKDIR /go/src/github.com/RyanJarv/scproxy
+
+COPY main.go .
+COPY scproxy scproxy
+COPY vendor vendor
+RUN go install .
+
+CMD /go/bin/scproxy

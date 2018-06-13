@@ -1,0 +1,39 @@
+version: '3'
+services:
+  sshd-ro:
+    build:
+      context: sshd
+      args:
+        env: ro
+    ports:
+      - "2222:22"
+    networks:
+      - proxy
+  sshd-rw:
+    build:
+      context: sshd
+      args:
+        env: rw
+    ports:
+      - "2223:22"
+    networks:
+      - backend
+  scproxy:
+    build: .
+    environment:
+      - SCPROXY_BACKEND=redis://redis:6379
+    networks:
+      - proxy
+      - backend
+  redis:
+    image: redis:3
+    volumes:
+      - "./data/redis:/data"
+    command: "redis-server --appendonly yes --appendfsync everysec"
+    networks:
+      - backend
+
+
+networks:
+  backend:
+  proxy:
