@@ -1,0 +1,36 @@
+version: '3'
+services:
+  redis_local:
+    build: ./redis_local
+    networks:
+      - redis
+
+  ssh:
+    build: ./ssh
+    volumes:
+      - ~/.ssh/:/root/.ssh
+    networks:
+      - ssh
+    environment:
+      - SCPROXY_BACKEND
+      - SSH_KEY
+
+  scproxy:
+    build: .
+    depends_on:
+      - redis_local
+      - ssh
+    volumes:
+      - .:/go/src/github.com/RyanJarv/scproxy
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - redis
+      - ssh
+    environment:
+      - "SCPROXY_LOCAL_BACKEND=redis://redis_local:6379"
+      - "SCPROXY_BACKEND=scproxy://ssh:6379"
+
+networks:
+  redis:
+  ssh:
