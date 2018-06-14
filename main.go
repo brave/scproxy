@@ -66,12 +66,10 @@ func main() {
 				mu.RLock()
 				res := client.Get(string(cmd.Args[1]))
 				mu.RUnlock()
-				if err := res.Err(); err != nil {
-					if err != redis.Nil {
+				if err := res.Err(); err == redis.Nil {
 						conn.WriteNull()
-					} else {
+				} else if err != nil {
 						panic(err)
-					}
 				} else {
 					conn.WriteBulk([]byte(res.Val()))
 				}
