@@ -34,16 +34,22 @@ func (s *CachingClient) Connect() {
 		DB:       0,  // use default DB
 	})
 
-	if _, err := s.local_client.Ping().Result(); err != nil {
-		log.Fatal(fmt.Sprintf("Could not ping local redis instance at %s: %s", s.local_host, err))
-	} else {
-		log.Printf("Connected to local cache at %s", s.local_host)
-	}
+	for true {
+		time.Sleep(time.Second * 3)
+		if _, err := s.local_client.Ping().Result(); err != nil {
+			log.Fatal(fmt.Sprintf("Could not ping local redis instance at %s: %s", s.local_host, err))
+			continue
+		} else {
+			log.Printf("Connected to local cache at %s", s.local_host)
+		}
 
-	if _, err := s.remote_client.Ping().Result(); err != nil {
-		log.Fatal(fmt.Sprintf("Could not ping remote redis instance at %s: %s", s.remote_host, err))
-	} else {
-		log.Printf("Connected to remote cache at %s", s.remote_host)
+		if _, err := s.remote_client.Ping().Result(); err != nil {
+			log.Fatal(fmt.Sprintf("Could not ping remote redis instance at %s: %s", s.remote_host, err))
+			continue
+		} else {
+			log.Printf("Connected to remote cache at %s", s.remote_host)
+		}
+		break
 	}
 }
 

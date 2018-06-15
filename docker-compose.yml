@@ -4,6 +4,8 @@ services:
     build: ./redis_local
     networks:
       - redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
 
   ssh:
     build: ./ssh
@@ -11,6 +13,8 @@ services:
       - ~/.ssh/:/root/.ssh
     networks:
       - ssh
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "ssh", "6379"]
     environment:
       - SCPROXY_BACKEND
       - SSH_KEY
@@ -27,6 +31,11 @@ services:
     networks:
       - redis
       - ssh
+    deploy:
+      restart_policy:
+        delay: 5s
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "scproxy", "6379"]
     environment:
       - "SCPROXY_LOCAL_BACKEND=redis://redis_local:6379"
       - "SCPROXY_BACKEND=scproxy://ssh:6379"
