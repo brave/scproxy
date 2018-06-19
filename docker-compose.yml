@@ -31,9 +31,7 @@ services:
     networks:
       - redis
       - ssh
-    deploy:
-      restart_policy:
-        delay: 5s
+    restart: on-failure
     healthcheck:
       test: ["CMD", "nc", "-vz", "scproxy", "6379"]
     environment:
