@@ -19,4 +19,6 @@ set -x
 eval $(ssh-agent)
 ssh-add "/root/.ssh/${SSH_KEY:-id_rsa}"
 
-ssh -N -L 0.0.0.0:6379:scproxy:6379 -o ExitOnForwardFailure=yes -p "$PORT" "${USER}@${HOST}"
+
+# autossh monitoring is unreliable for tcp forwarding so disable with -M 0 and rely on ssh internal health checking
+autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "ExitOnForwardFailure=yes" -N -L 0.0.0.0:6379:scproxy:6379 -o ExitOnForwardFailure=yes -p "$PORT" "${USER}@${HOST}"
