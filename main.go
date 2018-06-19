@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/RyanJarv/scproxy/scproxy"
+	"github.com/brave/scproxy/scproxy"
 	"github.com/go-redis/redis"
 	"github.com/tidwall/redcon"
 )

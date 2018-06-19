@@ -25,7 +25,7 @@ services:
       - redis_local
       - ssh
     volumes:
-      - .:/go/src/github.com/RyanJarv/scproxy
+      - .:/go/src/github.com/brave/scproxy
     ports:
       - "127.0.0.1:6379:6379"
     networks:

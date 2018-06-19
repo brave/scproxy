@@ -2,7 +2,7 @@ FROM golang
 ENV GOPATH /go
 RUN curl https://glide.sh/get | sh
 
-WORKDIR /go/src/github.com/RyanJarv/scproxy
+WORKDIR /go/src/github.com/brave/scproxy
 
 COPY main.go .
 COPY scproxy scproxy
