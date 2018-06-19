@@ -23,7 +23,7 @@ docker-compose -f docker-compose.proxy.yml up --build
 ./start.sh  <server ip>
 ```
 
-Currently this doesn't support encrypted ssh keys, and the above command assumes `~/.ssh/id_rsa`. Workaround for now is to create a second unencrypted ssh key that is only used for this and pass it as an argument to `./start.sh`.
+Currently this doesn't support encrypted ssh keys, and the above command assumes `~/.ssh/id_rsa`. Workaround for now is to create a second unencrypted ssh key that is only used for this service and pass it as an argument to `./start.sh`.
 ```
 ssh-keygen -f ~/.ssh/scproxy
 ./start.sh <server ip> scproxy
