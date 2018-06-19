@@ -22,17 +22,10 @@ func main() {
 
 	var client scproxy.Client
 	var remote_url *url.URL
-	var local_url *url.URL
 	var err error
 
 	if remote_url, err = remote_url.Parse(os.Getenv("SCPROXY_BACKEND")); err != nil {
 		log.Fatal("SCPROXY_BACKEND not set")
-	}
-
-	if remote_url.Scheme == "scproxy" {
-		if local_url, err = local_url.Parse(os.Getenv("SCPROXY_LOCAL_BACKEND")); err != nil {
-			log.Fatal("SCPROXY_BACKEND set to use scproxy and SCPROXY_LOCAL_BACKEND not set")
-		}
 	}
 
 	var remote_host string
@@ -40,13 +33,6 @@ func main() {
 		remote_host = fmt.Sprintf("%s:%s", remote_url.Hostname(), remote_url.Port())
 	} else {
 		remote_host = remote_url.Host
-	}
-
-	var local_host string
-	if local_url.Port() == "" {
-		local_host = fmt.Sprintf("%s:%s", local_url.Hostname(), local_url.Port())
-	} else {
-		local_host = local_url.Host
 	}
 
 	if s := remote_url.Scheme; s == "redis" {
@@ -64,6 +50,17 @@ func main() {
 			DB:       db,
 		})
 	} else if s == "scproxy" {
+		var local_url *url.URL
+		if local_url, err = local_url.Parse(os.Getenv("SCPROXY_LOCAL_BACKEND")); err != nil {
+			log.Fatal("SCPROXY_BACKEND set to use scproxy and SCPROXY_LOCAL_BACKEND not set")
+		}
+		var local_host string
+		if local_url.Port() == "" {
+			local_host = fmt.Sprintf("%s:%s", local_url.Hostname(), local_url.Port())
+		} else {
+			local_host = local_url.Host
+		}
+
 		client = scproxy.NewCachingClient(local_host, remote_host)
 	} else {
 		log.Fatal("SCPROXY_BACKEND scheme must be redis or scproxy")

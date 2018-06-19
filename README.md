@@ -9,10 +9,13 @@ here as well when the server side is open sourced (https://groups.google.com/a/c
 
 ### Server
 
-Add read and read/write public keys to sshd/authorized_keys.ro and sshd/authorized_keys.rw then start with docker-compose.
-
 ```
-docker-compose -f docker-compose.proxy.yml 
+# Allow read/write and read only access for your public key
+cat ~/.ssh/id_rsa.pub > sshd/authorized_keys.rw
+cat ~/.ssh/id_rsa.pub > sshd/authorized_keys.ro
+
+# Build and start server
+docker-compose -f docker-compose.proxy.yml up --build
 ```
 
 ### Read only client with local redis caching
